@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pottery Bliss – Checkout</title>
+<style>
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to bottom right, #fff0f5, #ffe6f0);
+  overflow: hidden;
+  text-align: center;
+}
+h1 {
+  color: #ff7fa8;
+  margin-top: 1em;
+}
+form {
+  background: #ffffffcc;
+  margin: 2em auto;
+  padding: 2em;
+  width: 300px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
+}
+input, button {
+  width: 90%;
+  padding: 0.8em;
+  margin: 0.5em 0;
+  border-radius: 12px;
+  border: 1px solid #ffc0cb;
+  font-family: inherit;
+}
+button {
+  background-color: #ff9ebe;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover { background-color: #ff7fa8; }
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+</style>
+</head>
+<body>
+<canvas id="hearts"></canvas>
+<h1>Checkout</h1>
+<form onsubmit="submitForm(event)">
+  <input type="text" placeholder="Full Name" required><br>
+  <input type="text" placeholder="Address" required><br>
+  <input type="email" placeholder="Email" required><br>
+  <input type="text" placeholder="Card Number" required><br>
+  <button type="submit">Place Order</button>
+</form>
+
+<script>
+function submitForm(e) {
+  e.preventDefault();
+  window.location.href = "thankyou.html";
+}
+
+const canvas = document.getElementById("hearts");
+const ctx = canvas.getContext("2d");
+let petals = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+canvas.addEventListener("click", (e) => {
+  petals.push({x: e.clientX, y: e.clientY, size: Math.random() * 10 + 5, alpha: 1});
+});
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  petals.forEach((p, i) => {
+    ctx.fillStyle = `rgba(255, 192, 203, ${p.alpha})`;
+    ctx.beginPath();
+    ctx.ellipse(p.x, p.y, p.size, p.size / 2, Math.random() * 2 * Math.PI, 0, Math.PI * 2);
+    ctx.fill();
+    p.y -= 0.8;
+    p.alpha -= 0.01;
+    if (p.alpha <= 0) petals.splice(i, 1);
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>
